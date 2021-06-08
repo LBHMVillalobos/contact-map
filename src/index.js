@@ -14,20 +14,27 @@ let map = document.getElementById("map");
 createMap = () => {
     console.log("Creating map...");
 };
-//Function that use a proxy call from the uprn to get the coordinates of the location
-getCoordinates = () => {
-    console.log("Getting coordinates...");
+
+getCoordinates = (uprn) => {
+    fetch(`${process.env.ADDRESSES_API_PROXY_PROD}?format=detailed&uprn=${uprn}`, {
+      method: "get"
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        let results = data.data.data.address;
+        let latitude=results[0].latitude;
+        let longitude=results[0].longitude;
+        console.log(latitude);
+        console.log(longitude);
+        createMap();
+    })
 };
 
+
 if (!uprn == ''){
-    getCoordinates();
-    createMap();
+    getCoordinates(uprn);
 } else {
     console.log("UPRN is missing");
 }
 
-// GetCoordinates = async() => {
-// const res = await fetch(`${process.env.ADDRESSES_API_PROXY_PROD}?format=detailed&uprn=100021051624`);
-// const response = await res.json();
-// console.log(response);
-// };

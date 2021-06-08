@@ -2426,23 +2426,29 @@ var map = document.getElementById("map"); //Function that create the map
 
 createMap = function createMap() {
   console.log("Creating map...");
-}; //Function that use a proxy call from the uprn to get the coordinates of the location
+};
 
-
-getCoordinates = function getCoordinates() {
-  console.log("Getting coordinates...");
+getCoordinates = function getCoordinates(uprn) {
+  fetch("".concat("https://n083cn2w7b.execute-api.us-east-1.amazonaws.com/production/address-proxy", "?format=detailed&uprn=").concat(uprn), {
+    method: "get"
+  }).then(function (response) {
+    return response.json();
+  }).then(function (data) {
+    console.log(data);
+    var results = data.data.data.address;
+    var latitude = results[0].latitude;
+    var longitude = results[0].longitude;
+    console.log(latitude);
+    console.log(longitude);
+    createMap();
+  });
 };
 
 if (!uprn == '') {
-  getCoordinates();
-  createMap();
+  getCoordinates(uprn);
 } else {
   console.log("UPRN is missing");
-} // GetCoordinates = async() => {
-// const res = await fetch(`${process.env.ADDRESSES_API_PROXY_PROD}?format=detailed&uprn=100021051624`);
-// const response = await res.json();
-// console.log(response);
-// };
+}
 },{"dotenv":"../node_modules/dotenv/lib/main.js","axios":"../node_modules/axios/index.js"}],"../../../AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -2471,7 +2477,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62300" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60654" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
